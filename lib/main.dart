@@ -1,10 +1,14 @@
+import 'package:droid_ui/controller/bindings.dart';
 import 'package:droid_ui/routes/pages.dart';
 import 'package:droid_ui/routes/routes.dart';
-import 'package:droid_ui/ui/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-void main() {
+Future<void> main() async {
+  // initialize Flutter Bindings
+  WidgetsFlutterBinding.ensureInitialized();
+  // initialize Controller Services
+  await AwaitBindings().dependencies();
   runApp(const MyApp());
 }
 
@@ -18,11 +22,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
       getPages: getPages,
       initialRoute: Routes.home,
+      initialBinding: AwaitBindings(),
     );
   }
 }

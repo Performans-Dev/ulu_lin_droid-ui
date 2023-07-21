@@ -7,10 +7,10 @@ import 'package:get/get.dart';
 final List<GetPage> getPages = [
   GetPage(
     name: Routes.settings,
-    page: () => SettingsScreen(),
+    page: () => const SettingsScreen(),
   ),
   GetPage(
     name: Routes.home,
-    page: () => HomeScreen(),
+    page: () => const HomeScreen(),
   )
 ];

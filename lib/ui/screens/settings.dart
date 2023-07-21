@@ -1,87 +1,79 @@
-import 'dart:convert';
-import 'dart:io';
 
+import 'package:droid_ui/controller/app.dart';
 import 'package:droid_ui/core/constants/keys.dart';
 import 'package:droid_ui/ui/components/scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
 
-class SettingsScreen extends StatefulWidget {
+class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
-  String selectedVoice = "";
-  List<String> voices = [];
-  @override
-  void initState() {
-    super.initState();
-    readOptions();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return ScaffoldWidget(
-      left: IconButton(
-        icon: Icon(Icons.arrow_back),
-        onPressed: () {
-          Get.back();
-        },
-      ),
-      content: Container(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("AYARLAR"),
-          Text("Ses"),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+    return GetBuilder<AppController>(builder: (app) {
+      return ScaffoldWidget(
+          maskEdges: true,
+          left: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Get.back(),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              for (var item in voices)
-                Chip(
-                  label: Text(item),
+              Container(
+                padding: const EdgeInsets.all(20.0),
+                alignment: Alignment.center,
+                child: Text(
+                  "AYARLAR",
+                  style: Theme.of(context).textTheme.displayLarge,
                 ),
-            ],
-          ),
-          Divider(),
-          Text("Mod"),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Chip(
-                label: Text("mutlu"),
               ),
-              Chip(
-                label: Text("normal"),
+              const Divider(),
+              const Text("Ses Secimi"),
+              Wrap(
+                spacing: 5.0,
+                children: [
+                  for (var item in app.voiceList)
+                    ChoiceChip(
+                      label: Text(item.name),
+                      selected: item.id == app.settings.selectedVoice,
+                      onSelected: (value) {
+                        app.saveVoice(item.id);
+                      },
+                    ),
+                ],
               ),
+              const Divider(),
+              const Text("Mod Secimi"),
+              Wrap(
+                spacing: 5.0,
+                children: [
+                  for (var item in app.moodList)
+                    ChoiceChip(
+                      label: Text(item.name),
+                      selected: item.id == app.settings.selectedMood,
+                      onSelected: (value) {
+                        app.saveMood(item.id);
+                      },
+                    ),
+                ],
+              ),
+              const Divider(),
+              const Text("Data Path"),
+              Text("${app.dataPath}"),
+              const Divider(),
+              const Text("Options"),
+              Text("${app.dataPath}${Keys.optionsFile}"),
+              const Divider(),
+              const Text("Settings"),
+              Text("${app.dataPath}${Keys.settingsFile}"),
+              const Divider(),
+              const Text("State"),
+              Text("${app.dataPath}${Keys.stateFile}"),
             ],
-          ),
-        ],
-      )),
-    );
-  }
-
-  Future<void> readOptions() async {
-    String path = (await getApplicationDocumentsDirectory()).path;
-    String filePath = "${path}/droid/${Keys.optionsFile}";
-    File f = File(filePath);
-
-    String content = await f.readAsString(); //filestream to string
-    Map<String, dynamic> data = json.decode(content);
-    List<String> list = [];
-    for (var item in data['voice']) {
-      list.add(item);
-    }
-    setState(() {
-      voices = list;
+          ));
     });
   }
- 
-
-
 }

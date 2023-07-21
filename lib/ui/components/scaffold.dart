@@ -26,7 +26,8 @@ class ScaffoldWidget extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(c.maxHeight / 2),
               child: Container(
-                decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: Colors.white),
                 child: Row(children: [
                   spacer(left),
                   body,
@@ -43,13 +44,13 @@ class ScaffoldWidget extends StatelessWidget {
   Widget spacer(Widget? child) => Container(
         height: double.infinity,
         width: math.min(Get.width, Get.height) / 8,
-        child: child,
         alignment: Alignment.center,
+        child: child,
       );
   Widget get body => Expanded(
         child: Stack(
           children: [
-            Container(
+            SizedBox(
               width: double.infinity,
               child: content,
             ),
@@ -67,7 +68,7 @@ class ScaffoldWidget extends StatelessWidget {
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      stops: [0.2, 1],
+                      stops: const [0.2, 1],
                     ),
                   ),
                 ),
@@ -86,7 +87,7 @@ class ScaffoldWidget extends StatelessWidget {
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      stops: [0, 0.8],
+                      stops: const [0, 0.8],
                     ),
                   ),
                 ),
